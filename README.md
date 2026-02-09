@@ -9,7 +9,7 @@ Aqui vão os fluxos que criei com o n8n. Cada arquivo .json está pronto pra imp
 4. Salve e ative
 
 ### Fluxos disponíveis:
-- ** 1º projeto em N8N: [analise-linha-planilha-groq.json](./fluxos-n8n/analise-linha-planilha-groq.json)**  
+- ** 1º projeto em N8N: [analise-linha-planilha-groq.json]**  
   Lê planilha XLSX → Merge → filtra → Loop → AI Agent (Groq) analisa linha por linha → adiciona coluna "analise" → salva novo XLSX com resultados.
 
 
