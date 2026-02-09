@@ -1,14 +1,16 @@
-# Julio - Construindo no tempo que sobra
+## Fluxos n8n
 
-Sou CLT, tenho pouco tempo livre, mas decidi parar de só consumir e começar a criar.
+Aqui vão os fluxos que criei com o n8n. Cada arquivo .json está pronto pra importar.
 
-Aqui vou registrar:
-- Projetos pessoais
-- Fluxos de automação que faço no n8n
-- Pequenas vitórias diárias
-- Qualquer coisa que eu construir;
+### Como importar no n8n
+1. Abra o n8n
+2. Clique em "Import from File" ou "Import from Clipboard"
+3. Selecione o .json ou cole o conteúdo
+4. Salve e ative
 
-Objetivo: Acompanhar a evolução em 365 dias, ter um portfólio real de coisas que eu fiz.
+### Fluxos disponíveis:
+- ** 1º projeto em N8N: [analise-linha-planilha-groq.json](./fluxos-n8n/analise-linha-planilha-groq.json)**  
+  Lê planilha XLSX → Merge → filtra → Loop → AI Agent (Groq) analisa linha por linha → adiciona coluna "analise" → salva novo XLSX com resultados.
 
-Dia 1 – 08/02/2026  
-Comecei o repositório. Próximo passo: primeiro fluxo n8n salvo aqui.
+
+Mais fluxos serão adicionados diariamente!
