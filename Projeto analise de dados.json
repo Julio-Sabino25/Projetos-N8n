@@ -1,0 +1,2279 @@
+{
+  "name": "Projeto analise de dados",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -528,
+        -720
+      ],
+      "id": "303a418b-cecb-4008-9b85-28edac0be825",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "content": "Projeto Realizado para treinar multiplas ferramentas de manipulação.\n",
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -688,
+        -1056
+      ],
+      "typeVersion": 1,
+      "id": "4e401c4b-2f5f-4d24-bb28-11f9cdeff50b",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "fileSelector": "C:\\Users\\julio\\.n8n-files\\files\\d_produtos.csv",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1.1,
+      "position": [
+        -80,
+        -720
+      ],
+      "id": "26e8e617-f5b0-4b5f-a652-15aa90cf0e2b",
+      "name": "D_Lista de produtos"
+    },
+    {
+      "parameters": {
+        "fileSelector": "C:\\Users\\julio\\.n8n-files\\files\\d_clientes.csv",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1.1,
+      "position": [
+        -64,
+        -400
+      ],
+      "id": "74a516be-c403-40fc-83f8-d7bf4355b9aa",
+      "name": "D_Clientes"
+    },
+    {
+      "parameters": {
+        "binaryPropertyName": "=data",
+        "options": {
+          "headerRow": true,
+          "includeEmptyCells": true,
+          "readAsString": true
+        }
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        144,
+        -400
+      ],
+      "id": "2cec3ceb-05a0-485d-97c4-a4607a992edc",
+      "name": "D_Clientes1"
+    },
+    {
+      "parameters": {
+        "options": {
+          "headerRow": true,
+          "includeEmptyCells": true,
+          "readAsString": true
+        }
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        128,
+        -720
+      ],
+      "id": "5bd9db1e-c8b5-42fd-9fad-a3821080b7fd",
+      "name": "D_Lista de produtos1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b6e85891-d79c-4b82-8589-78c589e4d001",
+              "name": "id_cliente",
+              "value": "={{ $json.id_cliente.replace(\".0\", \"\") }}",
+              "type": "string"
+            },
+            {
+              "id": "a3ebdf77-0a00-4471-87b5-9a5d1ae473fb",
+              "name": "Nome do cliente",
+              "value": "={{ $json.descr_cliente }}",
+              "type": "string"
+            },
+            {
+              "id": "813302b9-4e49-45de-9f3f-942d3235d481",
+              "name": "Localidade (cliente)",
+              "value": "={{ $json.regiao }}",
+              "type": "string"
+            },
+            {
+              "id": "e00db7cf-5808-4884-bc54-fc5464a671e8",
+              "name": "UF",
+              "value": "={{ $json.uf }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        352,
+        -400
+      ],
+      "id": "4eb3ad42-ecc4-4efd-80ec-1a63b406d644",
+      "name": "Editando colunas clientes"
+    },
+    {
+      "parameters": {
+        "fileSelector": "C:\\Users\\julio\\.n8n-files\\files\\f_nf_saida.csv",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1.1,
+      "position": [
+        -80,
+        -1056
+      ],
+      "id": "5135f5e7-af0d-4b9d-9e4b-8c57a8e79174",
+      "name": "F_notas fiscais de saída"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        128,
+        -1056
+      ],
+      "id": "c0cab0fa-000c-4e1f-a79e-5203c740fd13",
+      "name": "F_notas fiscais de saída1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": []
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        336,
+        -1056
+      ],
+      "id": "455bd755-56ff-4af4-95ca-ec0693334f07",
+      "name": "Normalizando colunas NF saída"
+    },
+    {
+      "parameters": {
+        "includeOtherFields": true,
+        "include": "except",
+        "excludeFields": "descr_categoria, product_weight_kg, volume_m3",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        336,
+        -816
+      ],
+      "id": "4777aaf3-d877-4e01-ab0a-9f3db058915f",
+      "name": "Normalizando colunas produtos"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "advanced": true,
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "id_mat_prod",
+              "field2": "id_produto"
+            }
+          ]
+        },
+        "joinMode": "enrichInput1",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        560,
+        -944
+      ],
+      "id": "0fed277e-322a-4938-87d2-6503c2bd75f3",
+      "name": "Associando produtos ás notas fiscais",
+      "retryOnFail": true,
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8c8d3669-3e0b-4a73-bc00-0af9d8268978",
+              "name": "id_categoria",
+              "value": "={{ $json.id_categoria }}",
+              "type": "string"
+            },
+            {
+              "id": "2c24adb0-732c-4935-b6fa-cce9897d019c",
+              "name": "descr_categoria",
+              "value": "={{ $json.descr_categoria }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "include": "selected",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        336,
+        -656
+      ],
+      "id": "f7e2a50f-d0d7-4a91-b259-97a1ee852c55",
+      "name": "Criando a D_categoria"
+    },
+    {
+      "parameters": {
+        "compare": "selectedFields",
+        "fieldsToCompare": "id_categoria",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.removeDuplicates",
+      "typeVersion": 2,
+      "position": [
+        560,
+        -656
+      ],
+      "id": "2ed82acd-69e6-46fc-af37-00ffa08ea326",
+      "name": "Remove Duplicates"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "fieldsToMatchString": "id_categoria",
+        "joinMode": "enrichInput1",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        816,
+        -832
+      ],
+      "id": "85aa7c7f-1fe4-4355-b45e-5721bf3cbfb8",
+      "name": "Categorizando Produtos"
+    },
+    {
+      "parameters": {
+        "includeOtherFields": true,
+        "include": "except",
+        "excludeFields": "id_mat_prod, id_cliente, id_categoria, id_produto",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1264,
+        -672
+      ],
+      "id": "719593cc-b16b-473a-aef2-8a52ea9c736a",
+      "name": "Limpando colunas desnecessarias"
+    },
+    {
+      "parameters": {
+        "compare": "selectedFields",
+        "fieldsToCompare": "id_cliente",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.removeDuplicates",
+      "typeVersion": 2,
+      "position": [
+        560,
+        -400
+      ],
+      "id": "49ef08d9-1f0d-4618-b7c8-ee5799e7711e",
+      "name": "Remove Duplicates1"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "fieldsToMatchString": "id_cliente",
+        "joinMode": "enrichInput1",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1040,
+        -672
+      ],
+      "id": "5f436abe-ec0e-4007-84c2-5643481bde84",
+      "name": "Associando clientes ás notas fiscais"
+    },
+    {
+      "parameters": {
+        "model": "groq/compound",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        4192,
+        -2016
+      ],
+      "id": "afb40feb-4c66-4a26-81e8-c7cc922759aa",
+      "name": "Groq Chat Model2",
+      "credentials": {
+        "groqApi": {
+          "id": "eHlxfTecDZEgHoQU",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "llama-3.1-8b-instant",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        4736,
+        -2640
+      ],
+      "id": "30834591-69ba-404b-93f6-103e89e586e2",
+      "name": "Groq Chat Model3",
+      "credentials": {
+        "groqApi": {
+          "id": "eHlxfTecDZEgHoQU",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "maxItems": 5
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        3568,
+        -2288
+      ],
+      "id": "c46ca98a-c689-45c1-8632-c1714280a2f5",
+      "name": "Limit1"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.UF }}",
+                    "rightValue": "SP",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "c81c8172-7b36-404d-9c5b-6b91d5179b14"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "SP"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "93e3fb43-d26d-4e75-9039-174b51ac668f",
+                    "leftValue": "={{ $json.UF }}",
+                    "rightValue": "RJ",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "RJ"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        2576,
+        -1696
+      ],
+      "id": "b9f510ac-ced6-435f-b006-cd0c08c7dfa1",
+      "name": "Separando Filiais da Regional Sudeste"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json['Localidade (cliente)'] }}",
+                    "rightValue": "Sudeste",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "98f20ca0-9afc-4ce2-aac9-cbad6384c2eb"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Sudeste"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "fbcd01fd-b4f0-4a98-94d2-e2f9c0480e44",
+                    "leftValue": "={{ $json['Localidade (cliente)'] }}",
+                    "rightValue": "Sul",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Sul"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        1504,
+        -672
+      ],
+      "id": "ee6ac278-5319-4043-b072-1e52d6af90a4",
+      "name": "Separando por  Regionais"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b8dbcd7a-bf42-4545-9d07-48026d9995ed",
+              "name": "qtde",
+              "value": "={{ $json.qtde.toNumber() }}",
+              "type": "number"
+            },
+            {
+              "id": "816b5aa6-e6d5-4929-b055-261aa7efbe6d",
+              "name": "Destinatário",
+              "value": "={{ $json.UF== 'SP' ? \n'julio.c.sabino25@gmail.com' : \n( $json.UF == 'RJ' ? \n'orpgdedomingo@gmail.com' :\"\" ) }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3312,
+        -2288
+      ],
+      "id": "41496f65-9c3a-4c7f-a4a1-15364869be48",
+      "name": "Convertendo colunas numericas SP"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        3792,
+        -2288
+      ],
+      "id": "38dfa050-133b-4d12-a41d-b5df46cd5ccc",
+      "name": "Regra de negócio para cada venda SP"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Quero que você analise o valor {{ $json.valor_bruto }} tente converter para contabil e com a quantidade quantidade {{ $json.qtde }} faça a extração do valor unitario.\n\n\nResponda apenas com o valor unitário sem comentarios adicionais ou memoria de calculo, apenas os valores me interessam. ",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        4208,
+        -2224
+      ],
+      "id": "3f72b10c-da3a-4831-9471-9545b31ce1e4",
+      "name": "Configuração da regra de negócio"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a71b0744-e020-4bf2-b397-abdac0a04b6e",
+              "name": "Custo do item",
+              "value": "={{ $('Convertendo colunas numericas SP').item.json.ccusto_item }}",
+              "type": "string"
+            },
+            {
+              "id": "16d77d9e-c757-4f30-a3e2-6512823e0c2d",
+              "name": "Documento da venda",
+              "value": "={{ $('Convertendo colunas numericas SP').item.json.documento }}",
+              "type": "string"
+            },
+            {
+              "id": "65eb74c1-3587-4c9e-881c-afcf7df12830",
+              "name": "Indice do item",
+              "value": "={{ $('Convertendo colunas numericas SP').item.json.item }}",
+              "type": "string"
+            },
+            {
+              "id": "60ca64fe-66c8-4790-855a-20f9cde98a48",
+              "name": "Data de envio da Nota",
+              "value": "={{ $('Convertendo colunas numericas SP').item.json.data_emissao }}",
+              "type": "string"
+            },
+            {
+              "id": "d55eefee-71e3-4e74-837b-d82f0f0f5fcf",
+              "name": "Quantidade de itens",
+              "value": "={{ $('Convertendo colunas numericas SP').item.json.qtde }}",
+              "type": "number"
+            },
+            {
+              "id": "4b604c6d-4764-4c36-a0b2-7c62d35fb9ca",
+              "name": "ICMS",
+              "value": "={{ $('Convertendo colunas numericas SP').item.json.icms }}",
+              "type": "string"
+            },
+            {
+              "id": "3d6a3fec-234c-4dc9-8f77-59a7909ce6f8",
+              "name": "Pis Cofins",
+              "value": "={{ $('Convertendo colunas numericas SP').item.json.pis_cofins }}",
+              "type": "string"
+            },
+            {
+              "id": "90a01110-38d9-4074-a5f0-228e19866f8f",
+              "name": "Produto vendido",
+              "value": "={{ $('Convertendo colunas numericas SP').item.json.descr_produto }}",
+              "type": "string"
+            },
+            {
+              "id": "9f56fa2d-e7c7-44b1-b81c-de32acf72a42",
+              "name": "Custo do item",
+              "value": "={{ $('Convertendo colunas numericas SP').item.json.ccusto }}",
+              "type": "string"
+            },
+            {
+              "id": "11e923df-8fcf-4756-92f7-68b89b3ec555",
+              "name": "Nome do cliente",
+              "value": "={{ $('Convertendo colunas numericas SP').item.json['Nome do cliente'] }}",
+              "type": "string"
+            },
+            {
+              "id": "f8bda340-c5df-4860-9bf4-c24bea26019b",
+              "name": "Localidade (cliente)",
+              "value": "={{ $('Convertendo colunas numericas SP').item.json['Localidade (cliente)'] }}",
+              "type": "string"
+            },
+            {
+              "id": "94d83a3e-18b4-4de5-ae81-7909580bd725",
+              "name": "UF",
+              "value": "={{ $('Convertendo colunas numericas SP').item.json.UF }}",
+              "type": "string"
+            },
+            {
+              "id": "387b4d13-214e-4b7c-a7bd-df093c12de12",
+              "name": "Valor Unitário",
+              "value": "= {{ $json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4592,
+        -2144
+      ],
+      "id": "9134ca1b-e626-472b-8a1a-764b8885d01f",
+      "name": "Convertendo regras"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        4832,
+        -2048
+      ],
+      "id": "12a7827a-e32a-491c-b7fd-55eb6db15ad3",
+      "name": "Juntando dados analisados"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        4496,
+        -2448
+      ],
+      "id": "11618846-a5ba-4be7-863f-72fd6ba46776",
+      "name": "Anexo de vendas SP"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        4160,
+        -2752
+      ],
+      "id": "ccfa1ea1-567a-4108-be89-f6f198579dd4",
+      "name": "Alimentando a IA de SP com as vendas"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        4496,
+        -2880
+      ],
+      "id": "a424763f-e291-4bc9-a1ad-58b24f088463",
+      "name": "Convertendo em Json"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Analise os dados brutos do relatório abaixo:\n\n{{ JSON.stringify($json.data) }}\n\nTarefa: Gere um e-mail formal e profissional baseado nesses dados.\nInclua:\n\n- Saudação genérica.\n- Resumo dos dados (vendas totais e produto mais vendido).\n- Encerramento.\n\nRegra: Responda apenas com o texto do e-mail pronto para envio, sem o campo 'Assunto'.\n\nFinalize Sempre Com \n\"Atenciosamente\nJulio Sabino\"\n\nao invez de [Seu nome]\n\ne no inicio ao invez de usar:\n\nPrezado(a) [Nome do destinatário],\n\nUse \"Prezada filial de São Paulo\"\n\nConforme a hora {{ $now }} mas não coloque a hora no e-mail",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        4752,
+        -2880
+      ],
+      "id": "d0289e64-b8b0-4e15-96b0-5132266c9c67",
+      "name": "Agente de e-mail personalizado SP"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        5216,
+        -2624
+      ],
+      "id": "4554c4d6-b332-4022-976f-4d26c798c697",
+      "name": "Juntando conteúdo e anexo"
+    },
+    {
+      "parameters": {
+        "sendTo": "julio.c.moreira11@gmail.com",
+        "subject": "Relatório de vendas",
+        "message": "={{ $json.output.replace(/\\n/g, '<br>') }}",
+        "options": {
+          "attachmentsUi": {
+            "attachmentsBinary": [
+              {}
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        5456,
+        -2624
+      ],
+      "id": "a0abeb76-d31b-4b7a-a4a9-854dffd22aa6",
+      "name": "Enviando e-mail para filial de SP",
+      "webhookId": "f21c5846-c450-4df8-b3b4-710df74f3f1f",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "P1v4yVqe5S2W33KU",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.UF }}",
+                    "rightValue": "PR",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "0dbf7089-05b1-4d28-a976-838f90358c7b"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "PR"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        2480,
+        160
+      ],
+      "id": "6ad70aa0-f9d1-4068-9586-37fbf54bf084",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "chatId": "137670718",
+        "text": "={{ $('Agente de e-mail personalizado SP').item.json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        5648,
+        -2624
+      ],
+      "id": "20555c11-60b3-45ca-9820-0adc0435e198",
+      "name": "Send a text message",
+      "webhookId": "7b968314-a211-4d66-a2a6-5c781cf81d7a",
+      "credentials": {
+        "telegramApi": {
+          "id": "f24FZHwnVo5DsfdP",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "groq/compound",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        4176,
+        -816
+      ],
+      "id": "9abd91fd-fa8c-4945-bac7-797953c20d02",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "eHlxfTecDZEgHoQU",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "llama-3.1-8b-instant",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        4720,
+        -1440
+      ],
+      "id": "73b373ab-fa5c-4fdd-bf1b-0aa82070eeb3",
+      "name": "Groq Chat Model4",
+      "credentials": {
+        "groqApi": {
+          "id": "eHlxfTecDZEgHoQU",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "maxItems": 5
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        3552,
+        -1088
+      ],
+      "id": "e3d37a3b-ffc5-4a70-872a-5de35264ca37",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Quero que você analise o valor {{ $json.valor_bruto }} tente converter para contabil e com a quantidade quantidade {{ $json.qtde }} faça a extração do valor unitario.\n\n\nResponda apenas com o valor unitário sem comentarios adicionais ou memoria de calculo, apenas os valores me interessam. ",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        4192,
+        -1024
+      ],
+      "id": "6d57a82f-a5b1-4e59-8689-5b2dce8e07cd",
+      "name": "Configuração da regra de negócio1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a71b0744-e020-4bf2-b397-abdac0a04b6e",
+              "name": "Custo do item",
+              "value": "={{ $('Convertendo colunas numericas RJ').item.json.ccusto_item }}",
+              "type": "string"
+            },
+            {
+              "id": "16d77d9e-c757-4f30-a3e2-6512823e0c2d",
+              "name": "Documento da venda",
+              "value": "={{ $('Convertendo colunas numericas RJ').item.json.documento }}",
+              "type": "string"
+            },
+            {
+              "id": "65eb74c1-3587-4c9e-881c-afcf7df12830",
+              "name": "Indice do item",
+              "value": "={{ $('Convertendo colunas numericas RJ').item.json.item }}",
+              "type": "string"
+            },
+            {
+              "id": "60ca64fe-66c8-4790-855a-20f9cde98a48",
+              "name": "Data de envio da Nota",
+              "value": "={{ $('Convertendo colunas numericas RJ').item.json.data_emissao }}",
+              "type": "string"
+            },
+            {
+              "id": "d55eefee-71e3-4e74-837b-d82f0f0f5fcf",
+              "name": "Quantidade de itens",
+              "value": "={{ $('Convertendo colunas numericas RJ').item.json.qtde }}",
+              "type": "number"
+            },
+            {
+              "id": "4b604c6d-4764-4c36-a0b2-7c62d35fb9ca",
+              "name": "ICMS",
+              "value": "={{ $('Convertendo colunas numericas RJ').item.json.icms }}",
+              "type": "string"
+            },
+            {
+              "id": "3d6a3fec-234c-4dc9-8f77-59a7909ce6f8",
+              "name": "Pis Cofins",
+              "value": "={{ $('Convertendo colunas numericas RJ').item.json.pis_cofins }}",
+              "type": "string"
+            },
+            {
+              "id": "90a01110-38d9-4074-a5f0-228e19866f8f",
+              "name": "Produto vendido",
+              "value": "={{ $('Convertendo colunas numericas RJ').item.json.descr_produto }}",
+              "type": "string"
+            },
+            {
+              "id": "9f56fa2d-e7c7-44b1-b81c-de32acf72a42",
+              "name": "Custo do item",
+              "value": "={{ $('Convertendo colunas numericas RJ').item.json.ccusto }}",
+              "type": "string"
+            },
+            {
+              "id": "11e923df-8fcf-4756-92f7-68b89b3ec555",
+              "name": "Nome do cliente",
+              "value": "={{ $('Convertendo colunas numericas RJ').item.json['Nome do cliente'] }}",
+              "type": "string"
+            },
+            {
+              "id": "f8bda340-c5df-4860-9bf4-c24bea26019b",
+              "name": "Localidade (cliente)",
+              "value": "={{ $('Convertendo colunas numericas RJ').item.json['Localidade (cliente)'] }}",
+              "type": "string"
+            },
+            {
+              "id": "94d83a3e-18b4-4de5-ae81-7909580bd725",
+              "name": "UF",
+              "value": "={{ $('Convertendo colunas numericas RJ').item.json.UF }}",
+              "type": "string"
+            },
+            {
+              "id": "387b4d13-214e-4b7c-a7bd-df093c12de12",
+              "name": "Valor Unitário",
+              "value": "= {{ $json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4576,
+        -944
+      ],
+      "id": "0904f72b-64eb-47a1-aae6-ad6b4c44bb7d",
+      "name": "Convertendo regras1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        4816,
+        -848
+      ],
+      "id": "a5d57d23-f8b8-41ec-9667-9803ee8375eb",
+      "name": "Juntando dados analisados1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        4480,
+        -1680
+      ],
+      "id": "32fa83e9-5369-4fdb-9810-a4da6d677dd5",
+      "name": "Convertendo em Json1"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        5200,
+        -1424
+      ],
+      "id": "f7e58493-42bc-4fd3-a190-eaafced66937",
+      "name": "Juntando conteúdo e anexo1"
+    },
+    {
+      "parameters": {
+        "sendTo": "julio.c.moreira11@gmail.com",
+        "subject": "Relatório de vendas",
+        "message": "={{ $json.output.replace(/\\n/g, '<br>') }}",
+        "options": {
+          "attachmentsUi": {
+            "attachmentsBinary": [
+              {}
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        5440,
+        -1424
+      ],
+      "id": "92c99f67-0f91-43dd-9cd9-9a2765fd4ebb",
+      "name": "Enviando e-mail para filial de SP1",
+      "webhookId": "f21c5846-c450-4df8-b3b4-710df74f3f1f",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "P1v4yVqe5S2W33KU",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "137670718",
+        "text": "={{ $('Agente de e-mail personalizado RJ').item.json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        5632,
+        -1424
+      ],
+      "id": "ae249dd3-1504-4136-997b-4e401aee83f3",
+      "name": "Send a text message1",
+      "webhookId": "7b968314-a211-4d66-a2a6-5c781cf81d7a",
+      "credentials": {
+        "telegramApi": {
+          "id": "f24FZHwnVo5DsfdP",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b8dbcd7a-bf42-4545-9d07-48026d9995ed",
+              "name": "qtde",
+              "value": "={{ $json.qtde.toNumber() }}",
+              "type": "number"
+            },
+            {
+              "id": "816b5aa6-e6d5-4929-b055-261aa7efbe6d",
+              "name": "Destinatário",
+              "value": "={{ $json.UF== 'SP' ? \n'julio.c.sabino25@gmail.com' : \n( $json.UF == 'RJ' ? \n'orpgdedomingo@gmail.com' :\"\" ) }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3296,
+        -1088
+      ],
+      "id": "ff71ef41-e763-4679-a8ee-caeffbcde546",
+      "name": "Convertendo colunas numericas RJ"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        3776,
+        -1088
+      ],
+      "id": "75bb810e-1861-4f51-b915-6f205c6d4c99",
+      "name": "Regra de negócio para cada venda RJ"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        4480,
+        -1248
+      ],
+      "id": "0841ffc4-0d18-40f4-97ef-f98efb2598e1",
+      "name": "Anexo de vendas RJ"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        4144,
+        -1552
+      ],
+      "id": "3091f851-d542-4d0a-9a15-bcb1e13de4dc",
+      "name": "Alimentando a IA de RJ com as vendas"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Analise os dados brutos do relatório abaixo:\n\n{{ JSON.stringify($json.data) }}\n\nTarefa: Gere um e-mail formal e profissional baseado nesses dados.\nInclua:\n\n- Saudação genérica.\n- Resumo dos dados (vendas totais e produto mais vendido).\n- Encerramento.\n\nRegra: Responda apenas com o texto do e-mail pronto para envio, sem o campo 'Assunto'.\n\nFinalize Sempre Com \n\"Atenciosamente\nJulio Sabino\"\n\nao invez de [Seu nome]\n\ne no inicio ao invez de usar:\n\nPrezado(a) [Nome do destinatário],\n\nUse \"Prezada filial de Rio de Janeiro\"\n\nConforme a hora {{ $now }} mas não coloque a hora no e-mail",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        4736,
+        -1680
+      ],
+      "id": "25f38f3c-9edf-485a-b582-1574f2390998",
+      "name": "Agente de e-mail personalizado RJ"
+    },
+    {
+      "parameters": {
+        "model": "groq/compound",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        3984,
+        432
+      ],
+      "id": "bf9f006c-895c-4b60-a51d-e6bdef4ca369",
+      "name": "Groq Chat Model1",
+      "credentials": {
+        "groqApi": {
+          "id": "eHlxfTecDZEgHoQU",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "llama-3.1-8b-instant",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        4528,
+        -192
+      ],
+      "id": "51fa39b3-7181-452c-926e-94edc6cdef07",
+      "name": "Groq Chat Model5",
+      "credentials": {
+        "groqApi": {
+          "id": "eHlxfTecDZEgHoQU",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "maxItems": 5
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        3360,
+        160
+      ],
+      "id": "60e6e1c8-8ed2-4b39-a172-ea4693b1cd14",
+      "name": "Limit2"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Quero que você analise o valor {{ $json.valor_bruto }} tente converter para contabil e com a quantidade quantidade {{ $json.qtde }} faça a extração do valor unitario.\n\n\nResponda apenas com o valor unitário sem comentarios adicionais ou memoria de calculo, apenas os valores me interessam. ",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        4000,
+        224
+      ],
+      "id": "e222f50e-58eb-4d10-8d3f-8f94e9950425",
+      "name": "Configuração da regra de negócio2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a71b0744-e020-4bf2-b397-abdac0a04b6e",
+              "name": "Custo do item",
+              "value": "={{ $('Convertendo colunas numericas PR').item.json.ccusto_item }}",
+              "type": "string"
+            },
+            {
+              "id": "16d77d9e-c757-4f30-a3e2-6512823e0c2d",
+              "name": "Documento da venda",
+              "value": "={{ $('Convertendo colunas numericas PR').item.json.documento }}",
+              "type": "string"
+            },
+            {
+              "id": "65eb74c1-3587-4c9e-881c-afcf7df12830",
+              "name": "Indice do item",
+              "value": "={{ $('Convertendo colunas numericas PR').item.json.item }}",
+              "type": "string"
+            },
+            {
+              "id": "60ca64fe-66c8-4790-855a-20f9cde98a48",
+              "name": "Data de envio da Nota",
+              "value": "={{ $('Convertendo colunas numericas PR').item.json.data_emissao }}",
+              "type": "string"
+            },
+            {
+              "id": "d55eefee-71e3-4e74-837b-d82f0f0f5fcf",
+              "name": "Quantidade de itens",
+              "value": "={{ $('Convertendo colunas numericas PR').item.json.qtde }}",
+              "type": "number"
+            },
+            {
+              "id": "4b604c6d-4764-4c36-a0b2-7c62d35fb9ca",
+              "name": "ICMS",
+              "value": "={{ $('Convertendo colunas numericas PR').item.json.icms }}",
+              "type": "string"
+            },
+            {
+              "id": "3d6a3fec-234c-4dc9-8f77-59a7909ce6f8",
+              "name": "Pis Cofins",
+              "value": "={{ $('Convertendo colunas numericas PR').item.json.pis_cofins }}",
+              "type": "string"
+            },
+            {
+              "id": "90a01110-38d9-4074-a5f0-228e19866f8f",
+              "name": "Produto vendido",
+              "value": "={{ $('Convertendo colunas numericas PR').item.json.descr_produto }}",
+              "type": "string"
+            },
+            {
+              "id": "9f56fa2d-e7c7-44b1-b81c-de32acf72a42",
+              "name": "Custo do item",
+              "value": "={{ $('Convertendo colunas numericas PR').item.json.ccusto }}",
+              "type": "string"
+            },
+            {
+              "id": "11e923df-8fcf-4756-92f7-68b89b3ec555",
+              "name": "Nome do cliente",
+              "value": "={{ $('Convertendo colunas numericas PR').item.json['Nome do cliente'] }}",
+              "type": "string"
+            },
+            {
+              "id": "f8bda340-c5df-4860-9bf4-c24bea26019b",
+              "name": "Localidade (cliente)",
+              "value": "={{ $('Convertendo colunas numericas PR').item.json['Localidade (cliente)'] }}",
+              "type": "string"
+            },
+            {
+              "id": "94d83a3e-18b4-4de5-ae81-7909580bd725",
+              "name": "UF",
+              "value": "={{ $('Convertendo colunas numericas PR').item.json.UF }}",
+              "type": "string"
+            },
+            {
+              "id": "387b4d13-214e-4b7c-a7bd-df093c12de12",
+              "name": "Valor Unitário",
+              "value": "= {{ $json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4384,
+        304
+      ],
+      "id": "de6359c6-bd22-4fe7-a3d7-501ed3cb8178",
+      "name": "Convertendo regras2"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        4624,
+        400
+      ],
+      "id": "a25dee61-c223-4aba-b44f-4d09ee5d232b",
+      "name": "Juntando dados analisados2"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        4288,
+        -448
+      ],
+      "id": "ad40da91-cff7-4b18-a362-0f6558d29a1c",
+      "name": "Convertendo em Json2"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        5008,
+        -176
+      ],
+      "id": "81b9a161-05d9-4e76-b03b-b6a5d2240dd6",
+      "name": "Juntando conteúdo e anexo2"
+    },
+    {
+      "parameters": {
+        "chatId": "137670718",
+        "text": "={{ $('Agente de e-mail personalizado RJ1').item.json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        5440,
+        -176
+      ],
+      "id": "ea038f1b-0463-4b02-b444-51097c5cc680",
+      "name": "Send a text message2",
+      "webhookId": "7b968314-a211-4d66-a2a6-5c781cf81d7a",
+      "credentials": {
+        "telegramApi": {
+          "id": "f24FZHwnVo5DsfdP",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Analise os dados brutos do relatório abaixo:\n\n{{ JSON.stringify($json.data) }}\n\nTarefa: Gere um e-mail formal e profissional baseado nesses dados.\nInclua:\n\n- Saudação genérica.\n- Resumo dos dados (vendas totais e produto mais vendido).\n- Encerramento.\n\nRegra: Responda apenas com o texto do e-mail pronto para envio, sem o campo 'Assunto'.\n\nFinalize Sempre Com \n\"Atenciosamente\nJulio Sabino\"\n\nao invez de [Seu nome]\n\ne no inicio ao invez de usar:\n\nPrezado(a) [Nome do destinatário],\n\nUse \"Prezada filial de Paraná\"\n\nConforme a hora {{ $now }} mas não coloque a hora no e-mail",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        4544,
+        -448
+      ],
+      "id": "fa000727-3b86-4c40-990c-fce9a2a701ae",
+      "name": "Agente de e-mail personalizado RJ1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b8dbcd7a-bf42-4545-9d07-48026d9995ed",
+              "name": "qtde",
+              "value": "={{ $json.qtde.toNumber() }}",
+              "type": "number"
+            },
+            {
+              "id": "816b5aa6-e6d5-4929-b055-261aa7efbe6d",
+              "name": "Destinatário",
+              "value": "={{ $json.UF== 'SP' ? \n'julio.c.sabino25@gmail.com' : \n( $json.UF == 'RJ' ? \n'orpgdedomingo@gmail.com' :\"\" ) }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2992,
+        160
+      ],
+      "id": "abc8fceb-0fb2-49a1-b547-6abef1762893",
+      "name": "Convertendo colunas numericas PR"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        3584,
+        160
+      ],
+      "id": "87fca7ea-9593-4d92-8a56-bf0c487acac4",
+      "name": "Regra de negócio para cada venda PR"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        4288,
+        0
+      ],
+      "id": "b3eee619-0d78-4cc3-87e9-c41a9496da27",
+      "name": "Anexo de vendas PR"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        3952,
+        -304
+      ],
+      "id": "55ae4bae-737f-4e72-bc27-90f763890409",
+      "name": "Alimentando a IA de PR com as vendas"
+    },
+    {
+      "parameters": {
+        "sendTo": "julio.c.moreira11@gmail.com",
+        "subject": "Relatório de vendas",
+        "message": "={{ $json.output.replace(/\\n/g, '<br>') }}",
+        "options": {
+          "attachmentsUi": {
+            "attachmentsBinary": [
+              {}
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        5248,
+        -176
+      ],
+      "id": "d6cc0f48-84dd-401e-9e1e-ae9cf7f36656",
+      "name": "Enviando e-mail para filial de PR",
+      "webhookId": "f21c5846-c450-4df8-b3b4-710df74f3f1f",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "P1v4yVqe5S2W33KU",
+          "name": "Gmail account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "D_Lista de produtos",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "D_Clientes",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "F_notas fiscais de saída",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "D_Lista de produtos": {
+      "main": [
+        [
+          {
+            "node": "D_Lista de produtos1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "D_Clientes": {
+      "main": [
+        [
+          {
+            "node": "D_Clientes1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "D_Clientes1": {
+      "main": [
+        [
+          {
+            "node": "Editando colunas clientes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "D_Lista de produtos1": {
+      "main": [
+        [
+          {
+            "node": "Normalizando colunas produtos",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Criando a D_categoria",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Editando colunas clientes": {
+      "main": [
+        [
+          {
+            "node": "Remove Duplicates1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "F_notas fiscais de saída": {
+      "main": [
+        [
+          {
+            "node": "F_notas fiscais de saída1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "F_notas fiscais de saída1": {
+      "main": [
+        [
+          {
+            "node": "Normalizando colunas NF saída",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalizando colunas NF saída": {
+      "main": [
+        [
+          {
+            "node": "Associando produtos ás notas fiscais",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalizando colunas produtos": {
+      "main": [
+        [
+          {
+            "node": "Associando produtos ás notas fiscais",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Associando produtos ás notas fiscais": {
+      "main": [
+        [
+          {
+            "node": "Categorizando Produtos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criando a D_categoria": {
+      "main": [
+        [
+          {
+            "node": "Remove Duplicates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove Duplicates": {
+      "main": [
+        [
+          {
+            "node": "Categorizando Produtos",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Categorizando Produtos": {
+      "main": [
+        [
+          {
+            "node": "Associando clientes ás notas fiscais",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limpando colunas desnecessarias": {
+      "main": [
+        [
+          {
+            "node": "Separando por  Regionais",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove Duplicates1": {
+      "main": [
+        [
+          {
+            "node": "Associando clientes ás notas fiscais",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Associando clientes ás notas fiscais": {
+      "main": [
+        [
+          {
+            "node": "Limpando colunas desnecessarias",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Configuração da regra de negócio",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Agente de e-mail personalizado SP",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit1": {
+      "main": [
+        [
+          {
+            "node": "Regra de negócio para cada venda SP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Separando Filiais da Regional Sudeste": {
+      "main": [
+        [
+          {
+            "node": "Convertendo colunas numericas SP",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Convertendo colunas numericas RJ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Separando por  Regionais": {
+      "main": [
+        [
+          {
+            "node": "Separando Filiais da Regional Sudeste",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convertendo colunas numericas SP": {
+      "main": [
+        [
+          {
+            "node": "Limit1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Regra de negócio para cada venda SP": {
+      "main": [
+        [
+          {
+            "node": "Alimentando a IA de SP com as vendas",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Anexo de vendas SP",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Configuração da regra de negócio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Configuração da regra de negócio": {
+      "main": [
+        [
+          {
+            "node": "Convertendo regras",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convertendo regras": {
+      "main": [
+        [
+          {
+            "node": "Juntando dados analisados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Juntando dados analisados": {
+      "main": [
+        [
+          {
+            "node": "Regra de negócio para cada venda SP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anexo de vendas SP": {
+      "main": [
+        [
+          {
+            "node": "Juntando conteúdo e anexo",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Alimentando a IA de SP com as vendas": {
+      "main": [
+        [
+          {
+            "node": "Convertendo em Json",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convertendo em Json": {
+      "main": [
+        [
+          {
+            "node": "Agente de e-mail personalizado SP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agente de e-mail personalizado SP": {
+      "main": [
+        [
+          {
+            "node": "Juntando conteúdo e anexo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Juntando conteúdo e anexo": {
+      "main": [
+        [
+          {
+            "node": "Enviando e-mail para filial de SP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviando e-mail para filial de SP": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Configuração da regra de negócio1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model4": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Agente de e-mail personalizado RJ",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Regra de negócio para cada venda RJ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Configuração da regra de negócio1": {
+      "main": [
+        [
+          {
+            "node": "Convertendo regras1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convertendo regras1": {
+      "main": [
+        [
+          {
+            "node": "Juntando dados analisados1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Juntando dados analisados1": {
+      "main": [
+        [
+          {
+            "node": "Regra de negócio para cada venda RJ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convertendo em Json1": {
+      "main": [
+        [
+          {
+            "node": "Agente de e-mail personalizado RJ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Juntando conteúdo e anexo1": {
+      "main": [
+        [
+          {
+            "node": "Enviando e-mail para filial de SP1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviando e-mail para filial de SP1": {
+      "main": [
+        [
+          {
+            "node": "Send a text message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convertendo colunas numericas RJ": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Regra de negócio para cada venda RJ": {
+      "main": [
+        [
+          {
+            "node": "Alimentando a IA de RJ com as vendas",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Anexo de vendas RJ",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Configuração da regra de negócio1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anexo de vendas RJ": {
+      "main": [
+        [
+          {
+            "node": "Juntando conteúdo e anexo1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Alimentando a IA de RJ com as vendas": {
+      "main": [
+        [
+          {
+            "node": "Convertendo em Json1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agente de e-mail personalizado RJ": {
+      "main": [
+        [
+          {
+            "node": "Juntando conteúdo e anexo1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Configuração da regra de negócio2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model5": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Agente de e-mail personalizado RJ1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit2": {
+      "main": [
+        [
+          {
+            "node": "Regra de negócio para cada venda PR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Configuração da regra de negócio2": {
+      "main": [
+        [
+          {
+            "node": "Convertendo regras2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convertendo regras2": {
+      "main": [
+        [
+          {
+            "node": "Juntando dados analisados2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Juntando dados analisados2": {
+      "main": [
+        [
+          {
+            "node": "Regra de negócio para cada venda PR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convertendo em Json2": {
+      "main": [
+        [
+          {
+            "node": "Agente de e-mail personalizado RJ1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Juntando conteúdo e anexo2": {
+      "main": [
+        [
+          {
+            "node": "Enviando e-mail para filial de PR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agente de e-mail personalizado RJ1": {
+      "main": [
+        [
+          {
+            "node": "Juntando conteúdo e anexo2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Convertendo colunas numericas PR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convertendo colunas numericas PR": {
+      "main": [
+        [
+          {
+            "node": "Limit2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Regra de negócio para cada venda PR": {
+      "main": [
+        [
+          {
+            "node": "Alimentando a IA de PR com as vendas",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Anexo de vendas PR",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Configuração da regra de negócio2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anexo de vendas PR": {
+      "main": [
+        [
+          {
+            "node": "Juntando conteúdo e anexo2",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Alimentando a IA de PR com as vendas": {
+      "main": [
+        [
+          {
+            "node": "Convertendo em Json2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviando e-mail para filial de PR": {
+      "main": [
+        [
+          {
+            "node": "Send a text message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "27d671fe-887b-41e7-9dcd-40f5eb3ed9e6",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "7efd73c8ccea06d878c84baaa30a05258f5753c4c0abfec4515a5bba6e25d68c"
+  },
+  "id": "Gx-4OilFjDxi1dfeoj3oa",
+  "tags": []
+}
