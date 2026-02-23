@@ -1,0 +1,1577 @@
+{
+  "name": "Projeto analise de dados  2",
+  "nodes": [
+    {
+      "parameters": {
+        "model": "groq/compound-mini",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        1568,
+        704
+      ],
+      "id": "fd545446-0090-4290-ad2f-9b9b3d49eaec",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "eHlxfTecDZEgHoQU",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -512,
+        -160
+      ],
+      "id": "49a08334-aa5a-4493-956d-0a0154247344",
+      "name": "Gatilho Manual"
+    },
+    {
+      "parameters": {
+        "fileSelector": "C:\\Users\\julio\\.n8n-files\\Bases\\*.xlsx",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1.1,
+      "position": [
+        -320,
+        -160
+      ],
+      "id": "35d43c07-4f65-40c5-8999-15d46de060a9",
+      "name": "Lendo os arquivos da pasta de vendas"
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        -128,
+        -160
+      ],
+      "id": "5a2a1525-16f2-4cc0-a6e1-1e32b6308e0e",
+      "name": "Extraindo e juntando arquivos  de vendas"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4004e002-6152-41a1-b59e-576658e27be7",
+              "name": "Chave Unica",
+              "value": "={{ $json['Id Cliente'] }}{{ $json.Sexo }}{{ $json[' ID da fatura'] }}{{ $json[' Filial'] }}{{ $json[' Cidade'] }}{{ $json[' Tipo de cliente'] }}{{ $json[' Linha de produtos'] }}{{ $json[' Preço unitário'] }}{{ $json[' Quantidade'] }}{{ $json[' Imposto 5%'] }}{{ $json['Id do Plano'] }}",
+              "type": "string"
+            },
+            {
+              "id": "5f5a1771-e63b-4bc2-9991-b92a91c63b07",
+              "name": "",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        64,
+        -160
+      ],
+      "id": "2f8de1b1-df27-4e55-9b00-80e2b26e6f52",
+      "name": "Criando chave unica"
+    },
+    {
+      "parameters": {
+        "compare": "selectedFields",
+        "fieldsToCompare": "['Chave Unica']",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.removeDuplicates",
+      "typeVersion": 2,
+      "position": [
+        320,
+        -304
+      ],
+      "id": "30aa0235-e2f2-47b2-a68d-b205576dd6c8",
+      "name": "Limpando Duplicadas"
+    },
+    {
+      "parameters": {
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "Chave Unica",
+              "field2": "Chave Unica"
+            }
+          ]
+        },
+        "resolve": "preferInput1",
+        "options": {
+          "multipleMatches": "first"
+        }
+      },
+      "type": "n8n-nodes-base.compareDatasets",
+      "typeVersion": 2.3,
+      "position": [
+        576,
+        -224
+      ],
+      "id": "70467726-0320-4fab-9130-e1c091c27ce8",
+      "name": "Identificando linhas duplicadas"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4c0cd2e5-3fc0-4c80-ad71-f299aeae5f93",
+              "name": "Id Cliente",
+              "value": "={{ $json['Id Cliente'] }}",
+              "type": "number"
+            },
+            {
+              "id": "31088ef9-11b2-4417-ade8-930a7d053075",
+              "name": " Filial",
+              "value": "={{ $json[' Filial'] }}",
+              "type": "string"
+            },
+            {
+              "id": "74391e16-4074-4909-a424-e0b4facd153c",
+              "name": " Linha de produtos",
+              "value": "={{ $json[' Linha de produtos'] }}",
+              "type": "string"
+            },
+            {
+              "id": "926d724b-4a14-4c47-a7e3-cfac91f3b0c4",
+              "name": "Id do Plano",
+              "value": "={{ $json['Id do Plano'] }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        832,
+        144
+      ],
+      "id": "62fcc77e-d917-4846-92f9-0e98085f0f0d",
+      "name": "Resumindo dados de vendas"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1056,
+        288
+      ],
+      "id": "6bea62a9-521b-49a9-9414-07fb2d0a765b",
+      "name": "Transformando linhas em lista"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1280,
+        464
+      ],
+      "id": "3b58f890-994e-4e7d-8c2b-9ea8c89b19b5",
+      "name": "Transformando lista em Json"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Quero que você crie um e-mail para o supervisor Nando.\n\ncomece o e-mail de maneira educada dando (bom dia, boa tarde ou boa noite) conforme o horario \n{{ $now.setZone('America/Sao_Paulo').toFormat('dd/MM/yyyy HH:mm') }}\nmas não precisa informar o horário no e-mail. \n\ninformando que  foi ou foram encontratos registros duplicados no relatório de vendas.\ninforme o ID:\n\ne o produto\n{{ JSON.stringify($json.data) }}\n\nFinalize o e-mail com \n\n\"\"\"Atenciosamente\nAuditoria de vendas\n\"\"\"\n\nNão coloque assunto nem comentarios extras, apenas o e-mail para colocar diretamente no nó de envio de e-mail do N8n\n",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        1568,
+        528
+      ],
+      "id": "da7b09e2-9298-429e-aa1f-a9e0012830ea",
+      "name": "Criando e-mail"
+    },
+    {
+      "parameters": {
+        "sendTo": "orpgdedomingo@gmail.com",
+        "subject": "Ocorrencias duplicadas",
+        "emailType": "text",
+        "message": "={{ $json.text }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1968,
+        624
+      ],
+      "id": "91fde326-ccd0-41c6-ac18-b5aef20d3287",
+      "name": "E-mail para supervisão",
+      "webhookId": "460e8354-7634-4db9-a5d5-f4863ae1fb79",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "P1v4yVqe5S2W33KU",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json[' Filial'] }}",
+                    "rightValue": "A",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "a4bfeb21-803c-42cd-9d93-4b3806a9249c"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Filial A"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "218b968f-5373-4e20-b1dc-5745cec798fe",
+                    "leftValue": "={{ $json[' Filial'] }}",
+                    "rightValue": "B",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Filial B"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "9639cebb-6170-4a8c-9826-366b4c42b66f",
+                    "leftValue": "={{ $json[' Filial'] }}",
+                    "rightValue": "C",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Filial  C"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        1248,
+        -384
+      ],
+      "id": "65e6cd82-c519-486e-9ae9-5529ae12c4b7",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ae4c081f-2fa2-4292-b629-feb4510c77cd",
+              "name": "Valor total",
+              "value": "={{( $json[' Preço unitário'] * $json[' Quantidade']).round(2)}}",
+              "type": "number"
+            },
+            {
+              "id": "a257f16f-976e-4a66-8310-04603b47d211",
+              "name": " Imposto 5%",
+              "value": "={{ $json[' Imposto 5%'].round(2)}}",
+              "type": "number"
+            },
+            {
+              "id": "c7411127-f735-4f06-b030-f9974b952721",
+              "name": "Total de impostos",
+              "value": "={{ (( $json[' Preço unitário'] * $json[' Quantidade']).round(2) * ($json[' Imposto 5%']/100)).round(2)}}",
+              "type": "number"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "include": "except",
+        "excludeFields": "['']",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        832,
+        -368
+      ],
+      "id": "80315e7a-1da7-4a89-96cb-eff2268a2a0a",
+      "name": "Aplicando impostos sobre vendas"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ed53c9e5-fc56-4488-9a91-1bc3e4e3368c",
+              "name": "Volor total + impostos",
+              "value": "={{ ($json['Valor total'] + $json['Total de impostos']).round(2) }}",
+              "type": "number"
+            },
+            {
+              "id": "aca3b63a-3266-41f5-b01f-d958422fa66e",
+              "name": "Id Cliente",
+              "value": "={{ $json['Id Cliente'] }}",
+              "type": "number"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1040,
+        -368
+      ],
+      "id": "6df99cd1-9bfa-4a00-80b0-8abf70ea1f7a",
+      "name": "Calculando Valor total + impostos"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b695e36d-1778-4d54-82f5-3dd5dd80e3c4",
+              "name": "Desconto especial",
+              "value": "={{ ($json['Volor total + impostos'] *0.03).round(2)}}",
+              "type": "number"
+            },
+            {
+              "id": "b6c53134-d36d-4fb1-86bd-60025cb04ed2",
+              "name": "Valor Final",
+              "value": "={{ ($json['Volor total + impostos'] *0.97).round(2)}}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2272,
+        -1056
+      ],
+      "id": "0b6bbff5-1d39-4510-941e-ae683b9df9fa",
+      "name": "Aplicando regra de negocios A"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b695e36d-1778-4d54-82f5-3dd5dd80e3c4",
+              "name": "Desconto especial",
+              "value": "={{ ($json['Volor total + impostos'] *0.01).round(2)}}",
+              "type": "number"
+            },
+            {
+              "id": "b6c53134-d36d-4fb1-86bd-60025cb04ed2",
+              "name": "Valor Final",
+              "value": "={{ ($json['Volor total + impostos'] *0.99).round(2)}}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2272,
+        -816
+      ],
+      "id": "65c54da8-88ab-4927-a9f5-e6d0e5f599ae",
+      "name": "Aplicando regra de negocios A1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2624,
+        -928
+      ],
+      "id": "a6a714a4-22f9-4b8d-915b-afd50168b5a6",
+      "name": "Juntando bases"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "7b8aa202-208a-4053-818f-41cb59fa361e",
+              "leftValue": "={{ $json['Id Cliente'] }}",
+              "rightValue": 50,
+              "operator": {
+                "type": "number",
+                "operation": "lt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1968,
+        -368
+      ],
+      "id": "0ce22e37-900c-4c09-bb32-73838e21ca55",
+      "name": "Separando clientes mais antigos B"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "daff5ff7-b017-44c6-984a-73e4d782b976",
+              "leftValue": "={{ $json['Id Cliente'] }}",
+              "rightValue": 50,
+              "operator": {
+                "type": "number",
+                "operation": "lt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1968,
+        -928
+      ],
+      "id": "a2151d87-c929-4859-aa87-a0e12d92f342",
+      "name": "Separando clientes mais antigos A"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2624,
+        -368
+      ],
+      "id": "30ebd25b-da6e-4ca8-92cc-c21b0ebf25bf",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e631001a-ddde-476a-bdae-2f2aeb573399",
+              "name": " Quantidade",
+              "value": "={{  $json[' Tipo de cliente'] == \"Membro\" ? $json[' Quantidade'] +1 : $json[' Quantidade'] }} ",
+              "type": "string"
+            },
+            {
+              "id": "21097c73-8a53-4899-8aef-c5fc2898ed9a",
+              "name": "Volor total + impostos",
+              "value": "={{  $json[' Tipo de cliente'] == \"Normal\"  ?  $json['Volor total + impostos'] -3 :  $json['Volor total + impostos']  }}  ",
+              "type": "number"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2288,
+        -480
+      ],
+      "id": "061546c0-63e1-4548-85bb-be4d0c6eb21a",
+      "name": "Bônus para membros B"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "62b01a00-4130-4880-b7a0-8ea95729ed9b",
+              "leftValue": "={{ $json[' Tipo de cliente'] }}",
+              "rightValue": "Membro",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1984,
+        128
+      ],
+      "id": "aa6275fd-45da-4110-bc5f-e56fec3158fc",
+      "name": "Separando Membros e não membros"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0098fcc7-961c-47c1-a35b-ff0cc4b9050f",
+              "name": "Volor total + impostos",
+              "value": "={{ ($json['Volor total + impostos'] *0.90 ).round(2)}}",
+              "type": "number"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2624,
+        -32
+      ],
+      "id": "e60d9f92-b22f-45c1-b1f9-e804118238a2",
+      "name": "Aplicando regra de negócio C"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a9480ee7-6ad3-47c8-8085-eaa3e1fc43bd",
+              "leftValue": "={{ $json['Id Cliente'] }}",
+              "rightValue": 50,
+              "operator": {
+                "type": "number",
+                "operation": "lt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2304,
+        304
+      ],
+      "id": "5065b0cf-7696-4f57-a78c-465e8db16a38",
+      "name": "Separando cliente antigos não membros"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3562e394-c56e-4033-9c5b-dca201039e8c",
+              "name": "Volor total + impostos",
+              "value": "={{ ($json['Volor total + impostos'] * 0.98).round(2)}}",
+              "type": "number"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2624,
+        192
+      ],
+      "id": "11407a0d-b28f-48f5-b5fe-713ee8dc72c8",
+      "name": "Regra para clientes antigos C"
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        3104,
+        272
+      ],
+      "id": "63c64cbf-d055-4058-a923-6f710a553ef7",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.1-8b-instant",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        3536,
+        -960
+      ],
+      "id": "d1a38658-4ce9-4d1e-8bb8-9d73db3e98fc",
+      "name": "Groq Chat Model1",
+      "credentials": {
+        "groqApi": {
+          "id": "eHlxfTecDZEgHoQU",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "137670718",
+        "text": "={{ $json.text.replace(/([_*[\\]()~`>#+-=|{}.!])/g, '\\\\$1') }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        4016,
+        -368
+      ],
+      "id": "42222382-c8ab-4bcf-86f2-bb9bae94b719",
+      "name": "Send a text message",
+      "webhookId": "d7d7c347-7baa-4e5f-bed7-fb4c2b48e7f5",
+      "credentials": {
+        "telegramApi": {
+          "id": "f24FZHwnVo5DsfdP",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Crie umamensagem resumida para filial B\n\nusado as seguintes informações:\n{{ JSON.stringify($json.data) }}\n\nInforme que essas são as 5 ultimas vendas registradas, e que as regras de negócio foram aplicadas.\n\nnão coloque comentarios nem titulos extras apenas a mensagem pronta para encaminhar para o telegram\n\n",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        3632,
+        -368
+      ],
+      "id": "1e240f0c-57be-4285-ab45-8235fcb39b19",
+      "name": "Basic LLM Chain1"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.3-70b-versatile",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        3632,
+        -160
+      ],
+      "id": "df60e1bc-0c39-4b7d-b430-ddc78e2d1c4b",
+      "name": "Groq Chat Model2",
+      "credentials": {
+        "groqApi": {
+          "id": "eHlxfTecDZEgHoQU",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        3312,
+        -816
+      ],
+      "id": "7ea91a79-de9a-416a-bdd6-951a3646a482",
+      "name": "Transformadoo relatório em arquivo"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        4016,
+        -912
+      ],
+      "id": "919384d2-de7b-420e-b488-42e47480cfe7",
+      "name": "juntando informações do relatório com texto"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        3088,
+        -1104
+      ],
+      "id": "f90d4fa9-f524-493d-a36b-2fa26effe444",
+      "name": "Juntando as ultimas vendas"
+    },
+    {
+      "parameters": {
+        "maxItems": 5,
+        "keep": "lastItems"
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        2880,
+        -1104
+      ],
+      "id": "730c8ff6-bf67-4b13-a71e-994f0cb20877",
+      "name": "limite para não sobrecarregar o modelo"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        3328,
+        -1120
+      ],
+      "id": "38875697-3c76-4aac-b277-07119503c7cc",
+      "name": "trasnformando em informações legiveis para o modelo"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Crie um e-mail para para a filial A\nuse os dados:\n{{ JSON.stringify($json.data) }}\npara informar as utimas 5 vendas que foram registradas.\nE informe que as regras de negocios foram aplicadas com sucesso.\nnão informe assuntos nem comentarios infome apenas o e-mail  que será encaminhado.\n\ne finalize sempre com \n\n( Atenciosamente \nauditoria de vendas)",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        3536,
+        -1120
+      ],
+      "id": "0d23435d-afeb-4b92-9b41-6aef1ada9ab0",
+      "name": "Criando o e-mail"
+    },
+    {
+      "parameters": {
+        "sendTo": "orpgdedomingo@gmail.com",
+        "subject": "Relatório de vendas",
+        "emailType": "text",
+        "message": "={{ $json.text }}",
+        "options": {
+          "attachmentsUi": {
+            "attachmentsBinary": [
+              {}
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        4224,
+        -912
+      ],
+      "id": "a12badf5-79a9-47dc-b5ab-ae2987a59e45",
+      "name": "E-mail para filial A",
+      "webhookId": "bb2a0092-2a07-4b3e-afd5-60aad44801fd",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "P1v4yVqe5S2W33KU",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "maxItems": 5,
+        "keep": "lastItems"
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        2832,
+        -368
+      ],
+      "id": "9bd34171-4e10-4fe9-a17f-18abf23215b9",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        3040,
+        -368
+      ],
+      "id": "21c5cf1c-0a8a-4e81-ad34-134d8c6b8bee",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        3328,
+        -368
+      ],
+      "id": "6d79fab4-9cc5-4162-9ce1-af5bc7c70c25",
+      "name": "Merge2"
+    },
+    {
+      "parameters": {
+        "maxItems": 5,
+        "keep": "lastItems"
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        3328,
+        288
+      ],
+      "id": "5531d808-3dad-455e-bc24-631e2f9c0747",
+      "name": "Limit1"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        3536,
+        288
+      ],
+      "id": "3f544eb3-a6eb-4794-938a-766cacbaaa3e",
+      "name": "Aggregate1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        3856,
+        304
+      ],
+      "id": "ce635dab-e2cb-4e34-98d9-12b7fb8027c5",
+      "name": "Merge3"
+    },
+    {
+      "parameters": {
+        "model": "groq/compound-mini",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        4096,
+        512
+      ],
+      "id": "15a126c2-a533-4b30-ae70-e57b367fb965",
+      "name": "Groq Chat Model3",
+      "credentials": {
+        "groqApi": {
+          "id": "eHlxfTecDZEgHoQU",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Crie um e-mail para para a filial C\nuse os dados:\n{{ JSON.stringify($json.data) }}\npara informar as utimas 5 vendas que foram registradas.\nE informe que as regras de negocios foram aplicadas com sucesso.\nnão informe assuntos nem comentarios infome apenas o e-mail  que será encaminhado.\n\ne finalize sempre com \n\n( Atenciosamente \nauditoria de vendas)",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        4112,
+        304
+      ],
+      "id": "4de3baa6-4f80-4cc0-9c3a-b72b5f49f5a7",
+      "name": "Criando o e-mail C"
+    },
+    {
+      "parameters": {
+        "sendTo": "orpgdedomingo@gmail.com",
+        "subject": "Relatório de vendas",
+        "emailType": "text",
+        "message": "={{ $json.text }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        4512,
+        304
+      ],
+      "id": "4e7b2ca3-447f-47e0-a43c-f567300e33b5",
+      "name": "E-mail para filial C",
+      "webhookId": "bb2a0092-2a07-4b3e-afd5-60aad44801fd",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "P1v4yVqe5S2W33KU",
+          "name": "Gmail account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Criando e-mail",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gatilho Manual": {
+      "main": [
+        [
+          {
+            "node": "Lendo os arquivos da pasta de vendas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lendo os arquivos da pasta de vendas": {
+      "main": [
+        [
+          {
+            "node": "Extraindo e juntando arquivos  de vendas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraindo e juntando arquivos  de vendas": {
+      "main": [
+        [
+          {
+            "node": "Criando chave unica",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criando chave unica": {
+      "main": [
+        [
+          {
+            "node": "Limpando Duplicadas",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Identificando linhas duplicadas",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Limpando Duplicadas": {
+      "main": [
+        [
+          {
+            "node": "Identificando linhas duplicadas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Identificando linhas duplicadas": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Aplicando impostos sobre vendas",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [],
+        [
+          {
+            "node": "Resumindo dados de vendas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Resumindo dados de vendas": {
+      "main": [
+        [
+          {
+            "node": "Transformando linhas em lista",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transformando linhas em lista": {
+      "main": [
+        [
+          {
+            "node": "Transformando lista em Json",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transformando lista em Json": {
+      "main": [
+        [
+          {
+            "node": "Criando e-mail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criando e-mail": {
+      "main": [
+        [
+          {
+            "node": "E-mail para supervisão",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Separando clientes mais antigos A",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Separando clientes mais antigos B",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Separando Membros e não membros",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aplicando impostos sobre vendas": {
+      "main": [
+        [
+          {
+            "node": "Calculando Valor total + impostos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculando Valor total + impostos": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aplicando regra de negocios A": {
+      "main": [
+        [
+          {
+            "node": "Juntando bases",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aplicando regra de negocios A1": {
+      "main": [
+        [
+          {
+            "node": "Juntando bases",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Separando clientes mais antigos B": {
+      "main": [
+        [
+          {
+            "node": "Bônus para membros B",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Separando clientes mais antigos A": {
+      "main": [
+        [
+          {
+            "node": "Aplicando regra de negocios A",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Aplicando regra de negocios A1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bônus para membros B": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Separando Membros e não membros": {
+      "main": [
+        [
+          {
+            "node": "Aplicando regra de negócio C",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Separando cliente antigos não membros",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Separando cliente antigos não membros": {
+      "main": [
+        [
+          {
+            "node": "Regra para clientes antigos C",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Aplicando regra de negócio C": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Regra para clientes antigos C": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Juntando bases": {
+      "main": [
+        [
+          {
+            "node": "Transformadoo relatório em arquivo",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "limite para não sobrecarregar o modelo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Criando o e-mail",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain1": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transformadoo relatório em arquivo": {
+      "main": [
+        [
+          {
+            "node": "juntando informações do relatório com texto",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "juntando informações do relatório com texto": {
+      "main": [
+        [
+          {
+            "node": "E-mail para filial A",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Juntando as ultimas vendas": {
+      "main": [
+        [
+          {
+            "node": "trasnformando em informações legiveis para o modelo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "limite para não sobrecarregar o modelo": {
+      "main": [
+        [
+          {
+            "node": "Juntando as ultimas vendas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "trasnformando em informações legiveis para o modelo": {
+      "main": [
+        [
+          {
+            "node": "Criando o e-mail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criando o e-mail": {
+      "main": [
+        [
+          {
+            "node": "juntando informações do relatório com texto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge2": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Limit1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit1": {
+      "main": [
+        [
+          {
+            "node": "Aggregate1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate1": {
+      "main": [
+        [
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge3": {
+      "main": [
+        [
+          {
+            "node": "Criando o e-mail C",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Criando o e-mail C",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criando o e-mail C": {
+      "main": [
+        [
+          {
+            "node": "E-mail para filial C",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "8d7ac592-bb90-4c80-bcc8-5394620d8c5b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "7efd73c8ccea06d878c84baaa30a05258f5753c4c0abfec4515a5bba6e25d68c"
+  },
+  "id": "2QPgAamw4IUfRMTovVQi2",
+  "tags": []
+}
